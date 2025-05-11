@@ -1,7 +1,7 @@
 package com.example.ex39_sqlite;
 
 public class mealSuppliers {
-    public static final String TABLE_FOOD_PROVIDERS = "FoodProviders";
+    public static final String TABLE_MEAL_SUPPLIERS = "mealSuppliers";
     public static final String PROVIDER_ID = "provider_id";
     public static final String COMPANY_NAME = "company_name";
     public static final String MAIN_PHONE = "main_phone";

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Card ID:" />
+        <EditText
+            android:id="@+id/etCardId"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="First Name:" />
+        <EditText
+            android:id="@+id/etFirstName"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Last Name:" />
+        <EditText
+            android:id="@+id/etLastName"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Company:" />
+        <EditText
+            android:id="@+id/etCompany"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="ID Number:" />
+        <EditText
+            android:id="@+id/etIdNumber"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:text="Phone:" />
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:inputType="number" />
+    </LinearLayout>
+
+</LinearLayout>
