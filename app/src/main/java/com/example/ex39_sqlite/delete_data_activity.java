@@ -101,6 +101,7 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
         searchBtn = findViewById(R.id.searchBtn);
         deleteBtn = findViewById(R.id.deleteBtn);
 
+
         hlp = new HelperDB(this);
         employeesArray = new ArrayList<>();
         employeeIds = new ArrayList<>();
