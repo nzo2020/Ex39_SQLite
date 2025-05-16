@@ -12,6 +12,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+
 /**
  * MainActivity is the entry point of the app.
  * It sets up the main screen layout and handles
