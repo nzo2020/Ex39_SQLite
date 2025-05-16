@@ -12,15 +12,39 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * MainActivity is the entry point of the app.
+ * It sets up the main screen layout and handles
+ * menu item selections to navigate to different activities.
+ *
+ *
+ * @author      Noa Zohar <nz2020@bs.amalnet.k12.il>
+ * @version     1.0
+ * @since       15/4/2025
+ */
+
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is first created.
+     * Sets the content view to the main activity layout.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously
+     *                           being shut down then this Bundle contains the data it most
+     *                           recently supplied. Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
+    /**
+     * Initializes the contents of the Activity's standard options menu.
+     *
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -32,15 +56,14 @@ public class MainActivity extends AppCompatActivity {
      * Navigates to different activities based on the selected menu item.
      *
      * @param item The menu item that was selected.
-     * @return Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @return true if the event was handled here, false to allow normal menu processing to proceed.
      */
     @Override
     public boolean onOptionsItemSelected(@Nullable MenuItem item) {
         int id = item.getItemId();
 
         if(id == R.id.credits) {
-            Intent si = new Intent(this,mainCredits.class);
+            Intent si = new Intent(this, mainCredits.class);
             startActivity(si);
         }
         else if (id == R.id.insert) {
@@ -52,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(si);
         }
         else if (id == R.id.sort) {
-            Intent si = new Intent(this,sort_activity.class);
+            Intent si = new Intent(this, sort_activity.class);
             startActivity(si);
         }
         else if (id == R.id.delete) {

@@ -21,18 +21,73 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+/**
+ * delete_data_activity allows users to view, search, and delete employee records from the SQLite database.
+ * It displays a list of employees, enables searching by input text, and provides functionality to delete selected employees
+ * along with their associated orders and meals. The activity also includes a menu for navigation to other parts of the app.
+ *
+ * @author      Noa Zohar <nz2020@bs.amalnet.k12.il>
+ * @version     1.0
+ * @since       15/4/2025
+ */
+
 public class delete_data_activity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
+    /**
+     * ListView to display employee records.
+     */
     ListView lv;
+
+    /**
+     * EditText for entering search queries.
+     */
     EditText searchInput;
-    Button searchBtn, deleteBtn;
+
+    /**
+     * Button to perform a search.
+     */
+    Button searchBtn;
+
+    /**
+     * Button to delete the selected employee.
+     */
+    Button deleteBtn;
+
+    /**
+     * Adapter for displaying employee data in the ListView.
+     */
     ArrayAdapter<String> adp;
+
+    /**
+     * SQLiteDatabase instance for database operations.
+     */
     SQLiteDatabase db;
+
+    /**
+     * HelperDB instance to manage database creation and version management.
+     */
     HelperDB hlp;
+
+    /**
+     * Cursor to iterate through database query results.
+     */
     Cursor crsr;
 
+    /**
+     * Index of the selected employee in the list.
+     */
     int selectedIndex = -1;
+
+    /**
+     * ArrayList of employee display strings.
+     */
     ArrayList<String> employeesArray, employeeIds;
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState previously saved state of the activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +122,9 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
         });
     }
 
+    /**
+     * Retrieves all employee records from the database and updates the ListView.
+     */
     private void getEmployees() {
         db = hlp.getReadableDatabase();
         crsr = db.query(Employees.TABLE_EMPLOYEES, null, null, null, null, null, null);
@@ -100,11 +158,22 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
         lv.setAdapter(adp);
     }
 
+    /**
+     * Handles item clicks in the ListView.
+     *
+     * @param adapterView the AdapterView where the click happened
+     * @param view the view within the AdapterView that was clicked
+     * @param pos the position of the view in the adapter
+     * @param rowId the row id of the item that was clicked
+     */
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int pos, long rowId) {
         selectedIndex = pos;
     }
 
+    /**
+     * Filters the employee list based on the user's search query.
+     */
     private void searchEmployee() {
         String query = searchInput.getText().toString().trim().toLowerCase();
         if (query.isEmpty()) {
@@ -130,6 +199,10 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
         selectedIndex = -1;
     }
 
+    /**
+     * Shows a confirmation dialog and deletes the selected employee if confirmed.
+     * Also deletes the associated orders and meals from the database.
+     */
     private void confirmDelete() {
         if (selectedIndex == -1 || selectedIndex >= employeeIds.size()) {
             Toast.makeText(this, "Please select an employee to delete", Toast.LENGTH_SHORT).show();
@@ -174,6 +247,12 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
         builder.show();
     }
 
+    /**
+     * Inflates the options menu.
+     *
+     * @param menu the options menu
+     * @return true to display the menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -185,8 +264,7 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
      * Navigates to different activities based on the selected menu item.
      *
      * @param item The menu item that was selected.
-     * @return Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @return true to consume the event here.
      */
     @Override
     public boolean onOptionsItemSelected(@Nullable MenuItem item) {
@@ -215,5 +293,4 @@ public class delete_data_activity extends AppCompatActivity implements AdapterVi
 
         return true;
     }
-
 }

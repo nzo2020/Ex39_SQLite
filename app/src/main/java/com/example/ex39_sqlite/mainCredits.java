@@ -62,8 +62,8 @@ public class mainCredits extends AppCompatActivity {
     public boolean onOptionsItemSelected(@Nullable MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.credits) {
-            Intent si = new Intent(this,mainCredits.class);
+        if(id == R.id.main) {
+            Intent si = new Intent(this,MainActivity.class);
             startActivity(si);
         }
         else if (id == R.id.insert) {

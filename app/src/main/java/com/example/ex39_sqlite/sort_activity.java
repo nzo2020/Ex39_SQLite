@@ -18,15 +18,56 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+/**
+ * Activity that displays employee records from the database
+ * with options to sort or filter the displayed data using a Spinner.
+ *
+ * @author      Noa Zohar <nz2020@bs.amalnet.k12.il>
+ * @version     1.0
+ * @since       15/4/2025
+ */
 public class sort_activity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    /**
+     * Spinner widget to select sorting/filtering options.
+     */
     private Spinner SpiSortFilter;
+
+    /**
+     * ListView to display employee records.
+     */
     private ListView lvrecords1;
+
+    /**
+     * SQLiteDatabase instance for database operations.
+     */
     private SQLiteDatabase db1;
+
+    /**
+     * Database helper instance to manage database creation and version management.
+     */
     private HelperDB hlp;
+
+    /**
+     * ArrayList holding the data strings to be displayed in the ListView.
+     */
     private ArrayList<String> tbl = new ArrayList<>();
+
+    /**
+     * ArrayAdapter to bind the ArrayList data to the ListView.
+     */
     private ArrayAdapter<String> adp;
+
+    /**
+     * Array of sorting/filtering options shown in the Spinner.
+     */
     private String[] filters;
 
+    /**
+     * Called when the activity is starting.
+     * Initializes UI components, database helper, and sets up the Spinner adapter and listener.
+     *
+     * @param savedInstanceState Bundle containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,64 +84,76 @@ public class sort_activity extends AppCompatActivity implements AdapterView.OnIt
         lvrecords1.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
         filters = new String[]{
-                "דרך הצגת מידע",
-                "להציג רק שם פרטי",
-                " למיין לפי שם משפחה",
-                "למיין לפי תעודת זהות "
-
+                "דרך הצגת מידע",           // Display method
+                "להציג רק שם פרטי",       // Show first name only
+                " למיין לפי שם משפחה",     // Sort by last name
+                "למיין לפי תעודת זהות "    // Sort by ID number
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, filters);
         SpiSortFilter.setAdapter(adapter);
     }
 
+    /**
+     * Called when an item in the Spinner is selected.
+     * Performs different database queries and updates the ListView based on the selected filter.
+     *
+     * @param parent The AdapterView where the selection happened.
+     * @param view The view within the AdapterView that was clicked.
+     * @param pos The position of the selected item.
+     * @param id The row id of the selected item.
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        tbl.clear(); // ניקוי רשימת הנתונים הקודמת
+        tbl.clear(); // Clear previous data
+
         db1 = hlp.getReadableDatabase();
 
         if (pos == 0) {
             return;
         }
 
-        if (pos == 1) { // הצגת שמות פרטי
+        if (pos == 1) {
             getFirstNamesOnly();
-        } else if (pos == 2) { // מיון לפי שם משפחה
+        } else if (pos == 2) {
             getAllEmployeesSortedByLastName();
-        } else if (pos == 3) { // מיון לפי תעודת זהות
+        } else if (pos == 3) {
             getAllEmployeesSortedByIdNumber();
         }
 
         db1.close();
 
-        // הגדרת האדפטר ל- ListView
-        adp = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tbl);
+        adp = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tbl);
         lvrecords1.setAdapter(adp);
     }
 
-    // פונקציה להוציא שמות פרטי
+    /**
+     * Retrieves and adds only first names of employees from the database to the list.
+     */
     private void getFirstNamesOnly() {
         Cursor crsr = db1.query(Employees.TABLE_EMPLOYEES,
-                new String[]{Employees.FIRST_NAME}, // only first name column
+                new String[]{Employees.FIRST_NAME}, // Select only FIRST_NAME column
                 null, null, null, null, null);
 
         int colFirst = crsr.getColumnIndex(Employees.FIRST_NAME);
 
         crsr.moveToFirst();
         while (!crsr.isAfterLast()) {
-            tbl.add(crsr.getString(colFirst)); // add only the first name to the list
+            tbl.add(crsr.getString(colFirst)); // Add first names to list
             crsr.moveToNext();
         }
         crsr.close();
     }
 
-
-    // פונקציה למיין לפי שם משפחה
+    /**
+     * Retrieves and adds all employee records sorted by last name in ascending order.
+     * The data includes card ID, full name, company, ID number, and phone.
+     */
     private void getAllEmployeesSortedByLastName() {
         Cursor crsr = db1.query(Employees.TABLE_EMPLOYEES,
-                null, // all columns
+                null, // Select all columns
                 null, null, null, null,
-                Employees.LAST_NAME + " ASC"); // sort by last name ascending
+                Employees.LAST_NAME + " ASC"); // Sort ascending by last name
 
         int colId = crsr.getColumnIndex(Employees.CARD_ID);
         int colFirst = crsr.getColumnIndex(Employees.FIRST_NAME);
@@ -111,25 +164,26 @@ public class sort_activity extends AppCompatActivity implements AdapterView.OnIt
 
         crsr.moveToFirst();
         while (!crsr.isAfterLast()) {
-            String line = "Card ID: " + crsr.getInt(colId) +
-                    ", Name: " + crsr.getString(colFirst) + " " + crsr.getString(colLast) +
-                    ", Company: " + crsr.getString(colCompany) +
-                    ", ID Number: " + crsr.getString(colIdNumber) +
-                    ", Phone: " + crsr.getString(colPhone);
+            String line = "Card ID: " + crsr.getInt(colId) + "\n" +
+                    "Name: " + crsr.getString(colFirst) + " " + crsr.getString(colLast) + "\n" +
+                    "Company: " + crsr.getString(colCompany) + "\n" +
+                    "T.Z: " + crsr.getString(colIdNumber) + "\n" +
+                    "Phone: " + crsr.getString(colPhone);
             tbl.add(line);
             crsr.moveToNext();
         }
         crsr.close();
     }
 
-
-
-    // פונקציה למיין לפי תעודת זהות
+    /**
+     * Retrieves and adds all employee records sorted by ID number in ascending order.
+     * The data includes card ID, full name, ID number, phone, and company.
+     */
     private void getAllEmployeesSortedByIdNumber() {
         Cursor crsr = db1.query(Employees.TABLE_EMPLOYEES,
-                null, // all columns
+                null, // Select all columns
                 null, null, null, null,
-                Employees.ID_NUMBER + " ASC"); // sort by ID number ascending
+                Employees.ID_NUMBER + " ASC"); // Sort ascending by ID number
 
         int colId = crsr.getColumnIndex(Employees.CARD_ID);
         int colFirst = crsr.getColumnIndex(Employees.FIRST_NAME);
@@ -140,24 +194,34 @@ public class sort_activity extends AppCompatActivity implements AdapterView.OnIt
 
         crsr.moveToFirst();
         while (!crsr.isAfterLast()) {
-            String line = "Card ID: " + crsr.getInt(colId) +
-                    ", Name: " + crsr.getString(colFirst) + " " + crsr.getString(colLast) +
-                    ", Company: " + crsr.getString(colCompany) +
-                    ", ID Number: " + crsr.getString(colIdNumber) +
-                    ", Phone: " + crsr.getString(colPhone);
+            String line = "Card ID: " + crsr.getInt(colId) + "\n" +
+                    "Name: " + crsr.getString(colFirst) + " " + crsr.getString(colLast) + "\n" +
+                    "T.Z: " + crsr.getString(colIdNumber) + "\n" +
+                    "Phone: " + crsr.getString(colPhone) + "\n" +
+                    "Company: " + crsr.getString(colCompany);
             tbl.add(line);
             crsr.moveToNext();
         }
         crsr.close();
     }
 
-
-
+    /**
+     * Called when no item is selected in the Spinner.
+     * Currently does nothing.
+     *
+     * @param parent The AdapterView where the selection disappeared from.
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        // לא נדרש כאן כלום
+        // No action needed
     }
 
+    /**
+     * Inflates the options menu when the activity starts.
+     *
+     * @param menu The options menu in which items are placed.
+     * @return true to display the menu.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -165,12 +229,11 @@ public class sort_activity extends AppCompatActivity implements AdapterView.OnIt
     }
 
     /**
-     * Handles item selections in the options menu.
-     * Navigates to different activities based on the selected menu item.
+     * Handles clicks on the options menu items.
+     * Starts different activities depending on the menu selection.
      *
-     * @param item The menu item that was selected.
-     * @return Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @param item The selected menu item.
+     * @return true to indicate the event was handled.
      */
     @Override
     public boolean onOptionsItemSelected(@Nullable MenuItem item) {

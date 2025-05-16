@@ -20,22 +20,55 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * InsertActivity provides a user interface to insert records into a local SQLite database.
+ * The activity supports inserting:
+ * - Employees
+ * - Meals
+ * - Food Suppliers
+ * - Orders
+ *
+ * Each data type is handled with a specific dialog layout and saved into the appropriate table.
+ *
+ *
+ * @author      Noa Zohar <nz2020@bs.amalnet.k12.il>
+ * @version     1.0
+ * @since       15/4/2025
+ */
+
 public class InsertActivity extends AppCompatActivity {
+    /** SQLite database instance */
     private SQLiteDatabase db;
+
+    /** Helper object to manage database creation and version management */
     private HelperDB hlp;
+
+    /** AlertDialog builder for showing input dialogs */
     private AlertDialog.Builder adb;
+
+    /** The current dialog layout */
     private LinearLayout mydialog;
 
+    /** Indicates the current insert type (1-Employee, 2-Meal, 3-Supplier, 4-Order) */
     private int type;
 
+    // Input fields for all data types
     private EditText etCardId, etFirstName, etLastName, etCompany, etIdNumber, etPhone
             ,etMealId, etStarter, etMainCourse, etSideDish, etDessert, etDrink
             ,etProviderId, etCompanyName, etMainPhone, etSecondaryPhone
             , etOrderId, etDate, etTime, etEmployeeId;
+
+    // String values from input fields
     private String cardId, FirstName, LastName, Company, IdNumber, Phone
             ,mealId, Starter, MainCourse, SideDish, Dessert, Drink
             ,provideId,CompanyName, MainPhone, SecondaryPhone
             ,Date, Time, orderId, employeeId;
+
+    /**
+     * Called when the activity is first created.
+     * Initializes database helper and closes writable connection (for now).
+     * @param savedInstanceState saved instance state bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +79,10 @@ public class InsertActivity extends AppCompatActivity {
         db.close();
     }
 
+    /**
+     * Opens a dialog for inserting a new employee.
+     * @param view the clicked view
+     */
     public void newEmployeeClick(View view){
         mydialog = (LinearLayout) getLayoutInflater().inflate(R.layout.my_dialog_employee, null);
         type = 1;
@@ -67,6 +104,10 @@ public class InsertActivity extends AppCompatActivity {
         adb.show();
     }
 
+    /**
+     * Opens a dialog for inserting a new meal.
+     * @param view the clicked view
+     */
     public void newMealClick(View view){
         mydialog = (LinearLayout) getLayoutInflater().inflate(R.layout.my_dialog_meal, null);
         type = 2;
@@ -88,6 +129,11 @@ public class InsertActivity extends AppCompatActivity {
         adb.show();
     }
 
+
+    /**
+     * Opens a dialog for inserting a new food supplier.
+     * @param view the clicked view
+     */
     public void newFoodSupplierClick(View view){
         mydialog = (LinearLayout) getLayoutInflater().inflate(R.layout.my_dialog_meal_supplier, null);
         type = 3;
@@ -105,6 +151,11 @@ public class InsertActivity extends AppCompatActivity {
 
         adb.show();
     }
+
+    /**
+     * Opens a dialog for inserting a new order.
+     * @param view the clicked view
+     */
 
     public void newOrderClick(View view){
         mydialog = (LinearLayout) getLayoutInflater().inflate(R.layout.my_dialog_order, null);
@@ -126,6 +177,10 @@ public class InsertActivity extends AppCompatActivity {
         adb.show();
     }
 
+    /**
+     * Listener for dialog button clicks (Enter, Cancel, Reset).
+     * Handles data validation and insertion based on the selected type.
+     */
     DialogInterface.OnClickListener myclick = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -281,10 +336,24 @@ public class InsertActivity extends AppCompatActivity {
     };
 
 
+    /**
+     * Checks if the given ID is valid.
+     * A valid ID must have exactly 9 digits and must not be empty.
+     *
+     * @param id The ID string to check.
+     * @return true if the ID is valid, false otherwise.
+     */
     public boolean checkId(String id){
         return (id.length()==9 && !id.isEmpty());
     }
 
+    /**
+     * Checks if the given phone number is valid.
+     * A valid phone number must be exactly 10 digits long, start with "05", and not be empty.
+     *
+     * @param phone The phone number string to check.
+     * @return true if the phone number is valid, false otherwise.
+     */
     public boolean checkPhoneNumber(String phone) {
         if (phone.length() != 10 || !phone.substring(0, 2).equals("05") || phone.isEmpty()) {
             return false;
@@ -292,7 +361,13 @@ public class InsertActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * Checks if the given date is valid.
+     * Valid format: dd/MM/yyyy, with valid day, month, and leap year check for February.
+     *
+     * @param date The date string to check.
+     * @return true if the date is valid, false otherwise.
+     */
     public boolean checkDate(String date) {
         if (date.length() != 10 || date.charAt(2) != '/' || date.charAt(5) != '/' || date.isEmpty())
             return false;
@@ -330,6 +405,12 @@ public class InsertActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Determines whether the given year is a leap year.
+     *
+     * @param year The year to check.
+     * @return true if the year is a leap year, false otherwise.
+     */
     private boolean isLeapYear(int year) {
         if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
             return true;
@@ -338,6 +419,13 @@ public class InsertActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if the given time is valid.
+     * Valid format: HH:mm where HH is 00–23 and mm is 00–59.
+     *
+     * @param time The time string to check.
+     * @return true if the time is valid, false otherwise.
+     */
     public boolean checkTime(String time) {
         if (time.length() != 5 || time.charAt(2) != ':' || time.isEmpty())
             return false;
@@ -355,6 +443,12 @@ public class InsertActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates the options menu.
+     *
+     * @param menu The options menu in which items are placed.
+     * @return true for the menu to be displayed; false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -366,15 +460,14 @@ public class InsertActivity extends AppCompatActivity {
      * Navigates to different activities based on the selected menu item.
      *
      * @param item The menu item that was selected.
-     * @return Return false to allow normal menu processing to
-     * proceed, true to consume it here.
+     * @return true if the event was handled, false to allow normal menu processing.
      */
     @Override
     public boolean onOptionsItemSelected(@Nullable MenuItem item) {
         int id = item.getItemId();
 
         if(id == R.id.credits) {
-            Intent si = new Intent(this,mainCredits.class);
+            Intent si = new Intent(this, mainCredits.class);
             startActivity(si);
         }
         else if (id == R.id.main) {
@@ -386,7 +479,7 @@ public class InsertActivity extends AppCompatActivity {
             startActivity(si);
         }
         else if (id == R.id.sort) {
-            Intent si = new Intent(this,sort_activity.class);
+            Intent si = new Intent(this, sort_activity.class);
             startActivity(si);
         }
         else if (id == R.id.delete) {
